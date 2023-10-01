@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/dao
+    username: root
+    password: mysql
+
+  liquibase:
+    enabled: true
+    database-change-log-table: classpath:db.changelog/db.changelog-master.yaml
+    default-schema: dao
