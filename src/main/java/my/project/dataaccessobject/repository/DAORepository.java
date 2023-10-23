@@ -14,17 +14,16 @@ import java.util.stream.Collectors;
 
 @Repository
 public class DAORepository {
-    private static final String scriptFile = "select_product_name.sql";
-    private final String scriptFile2;
+    private final String scriptFile;
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     public DAORepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.scriptFile2 = read();
+        this.scriptFile = read("select_product_name.sql");
     }
 
-    private static String read() {
-        try (InputStream inputStream = new ClassPathResource(DAORepository.scriptFile).getInputStream();
+    private static String read(String scriptFile) {
+        try (InputStream inputStream = new ClassPathResource(scriptFile).getInputStream();
              BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
             return bufferedReader.lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
@@ -33,7 +32,6 @@ public class DAORepository {
     }
 
     public List<String> getProductName(String name) {
-        return jdbcTemplate.query(scriptFile2, Map.of("name", name),
-                ((rs, rowNum) -> rs.getString("product_name")));
+        return jdbcTemplate.queryForList(scriptFile, Map.of("name", name), String.class);
     }
 }

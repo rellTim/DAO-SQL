@@ -9,5 +9,5 @@ spring:
 
   liquibase:
     enabled: true
-    database-change-log-table: classpath:db.changelog/db.changelog-master.yaml
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
     default-schema: dao
